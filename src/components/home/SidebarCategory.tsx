@@ -5,23 +5,22 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Plus, Minus } from 'lucide-react'
 import { StarRating } from '@/components/ui/StarRating'
+import { getAllProducts } from '@/lib/products'
+
+const products = getAllProducts()
 
 const CATEGORIES = [
   { label: 'Clothes', icon: '/assets/images/icons/clothes.png', count: 53, href: '/shop?category=clothes' },
   { label: 'Footwear', icon: '/assets/images/icons/footwear.png', count: 35, href: '/shop?category=footwear' },
   { label: 'Jewelry', icon: '/assets/images/icons/jewelry.png', count: 28, href: '/shop?category=jewelry' },
   { label: 'Perfume', icon: '/assets/images/icons/perfume.png', count: 14, href: '/shop?category=perfume' },
-  { label: 'Cosmetics', icon: '/assets/images/icons/cosmetics.png', count: 20, href: '/shop?category=cosmetics' },
-  { label: 'Glasses', icon: '/assets/images/icons/glasses.png', count: 68, href: '/shop?category=glasses' },
-  { label: 'Bags', icon: '/assets/images/icons/bags.png', count: 45, href: '/shop?category=bags' },
+  { label: 'Accessories', icon: '/assets/images/icons/cosmetics.png', count: 20, href: '/shop?category=accessories' },
+  { label: 'Watches', icon: '/assets/images/icons/glasses.png', count: 18, href: '/shop?category=watches' },
+  { label: 'Shoes', icon: '/assets/images/icons/bags.png', count: 45, href: '/shop?category=shoes' },
 ]
 
-const BEST_SELLERS = [
-  { id: '1', title: 'Baby Fabric Shoes', image: '/assets/images/products/1.jpg', price: 4.0, originalPrice: 5.0, rating: 5 },
-  { id: '2', title: "Men's Hoodies T-Shirt", image: '/assets/images/products/2.jpg', price: 7.0, originalPrice: 17.0, rating: 4 },
-  { id: '3', title: 'Girls T-Shirt', image: '/assets/images/products/3.jpg', price: 3.0, originalPrice: 5.0, rating: 5 },
-  { id: '4', title: 'Woolen Hat For Men', image: '/assets/images/products/4.jpg', price: 15.0, originalPrice: 25.0, rating: 3 },
-]
+// Use actual products with rating >= 4 as best sellers
+const BEST_SELLERS = products.filter(p => p.rating >= 4).slice(0, 4)
 
 export default function SidebarCategory() {
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -48,7 +47,6 @@ export default function SidebarCategory() {
                       fill
                       className="object-contain"
                       onError={(e) => {
-                        // Fallback to a colored circle if icon not found
                         (e.target as HTMLImageElement).style.display = 'none'
                       }}
                     />

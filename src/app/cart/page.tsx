@@ -53,16 +53,20 @@ export default function CartPage() {
     }
   }
 
-  const updateQty = (id: string, delta: number) => {
+  const updateQty = (id: string, size: string, color: string, delta: number) => {
     const updated = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
+      (item.id === id && item.size === size && item.color === color)
+        ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+        : item
     )
     setCartItems(updated)
     saveCart(updated)
   }
 
-  const removeItem = (id: string) => {
-    const updated = cartItems.filter((item) => item.id !== id)
+  const removeItem = (id: string, size: string, color: string) => {
+    const updated = cartItems.filter(
+      (item) => !(item.id === id && item.size === size && item.color === color)
+    )
     setCartItems(updated)
     saveCart(updated)
   }
@@ -119,7 +123,7 @@ export default function CartPage() {
               </div>
 
               {cartItems.map((item) => (
-                <div key={item.id} className="bg-white rounded-lg border border-border p-4">
+                <div key={`${item.id}-${item.size}-${item.color}`} className="bg-white rounded-lg border border-border p-4">
                   <div className="md:grid md:grid-cols-12 md:gap-4 md:items-center flex flex-col gap-4">
                     {/* Product */}
                     <div className="col-span-6 flex items-center gap-4">
@@ -141,7 +145,7 @@ export default function CartPage() {
                           </span>
                         </div>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.id, item.size, item.color)}
                           className="flex items-center gap-1 text-xs text-red-400 hover:text-red-600 transition-colors mt-1"
                         >
                           <Trash2 size={12} /> Remove
@@ -161,14 +165,14 @@ export default function CartPage() {
                     <div className="col-span-2 flex justify-center">
                       <div className="flex items-center border border-border rounded-sm">
                         <button
-                          onClick={() => updateQty(item.id, -1)}
+                          onClick={() => updateQty(item.id, item.size, item.color, -1)}
                           className="w-8 h-8 flex items-center justify-center text-text-secondary hover:text-primary transition-colors"
                         >
                           <Minus size={14} />
                         </button>
                         <span className="w-8 text-center text-sm font-semibold">{item.quantity}</span>
                         <button
-                          onClick={() => updateQty(item.id, 1)}
+                          onClick={() => updateQty(item.id, item.size, item.color, 1)}
                           className="w-8 h-8 flex items-center justify-center text-text-secondary hover:text-primary transition-colors"
                         >
                           <Plus size={14} />

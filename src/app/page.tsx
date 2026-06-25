@@ -6,17 +6,9 @@ import ProductCard from '@/components/product/ProductCard'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Truck, Shield, Clock, Star } from 'lucide-react'
+import { getAllProducts } from '@/lib/products'
 
-const FEATURED_PRODUCTS = [
-  { id: '1', image: '/assets/images/products/jacket-1.jpg', title: 'Mens Winter Leathers Jackets', price: 48.0, originalPrice: 75.0, category: 'Jacket', rating: 3, reviews: 8 },
-  { id: '2', image: '/assets/images/products/shirt-1.jpg', title: 'Pure Garment Dyed Cotton Shirt', price: 45.0, originalPrice: 56.0, category: 'Shirt', rating: 3, reviews: 5, badge: 'Sale' },
-  { id: '3', image: '/assets/images/products/jacket-2.jpg', title: 'MEN Yarn Fleece Full-Zip Jacket', price: 58.0, originalPrice: 65.0, category: 'Jacket', rating: 3, reviews: 12 },
-  { id: '4', image: '/assets/images/products/clothes-4.jpg', title: 'Black Floral Wrap Midi Skirt', price: 25.0, originalPrice: 35.0, category: 'Skirt', rating: 5, reviews: 20, badge: 'New' },
-  { id: '5', image: '/assets/images/products/shoe-1.jpg', title: "Casual Men's Brown Shoes", price: 99.0, originalPrice: 105.0, category: 'Casual', rating: 5, reviews: 18 },
-  { id: '6', image: '/assets/images/products/watch-2.jpg', title: 'Pocket Watch Leather Pouch', price: 150.0, originalPrice: 170.0, category: 'Watches', rating: 3, reviews: 6, badge: 'Sale' },
-  { id: '7', image: '/assets/images/products/watch-1.jpg', title: 'Smart Watche Vital Plus', price: 100.0, originalPrice: 120.0, category: 'Watches', rating: 4, reviews: 14 },
-  { id: '8', image: '/assets/images/products/party-wear-1.jpg', title: 'Womens Party Wear Shoes', price: 25.0, originalPrice: 30.0, category: 'Party Wear', rating: 3, reviews: 9, badge: 'Sale' },
-]
+const ALL_PRODUCTS = getAllProducts()
 
 const FEATURES = [
   { icon: Truck, title: 'Free Shipping', desc: 'On orders over $55', color: 'text-blue-500' },
@@ -26,6 +18,9 @@ const FEATURES = [
 ]
 
 export default function HomePage() {
+  // Use first 8 products for "New Products" section
+  const featuredProducts = ALL_PRODUCTS.slice(0, 8)
+
   return (
     <>
       {/* Hero Banner */}
@@ -62,31 +57,7 @@ export default function HomePage() {
 
             {/* Right: Tabbed Products */}
             <div className="flex-1 min-w-0">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* New Arrivals column */}
-                <div>
-                  <h3 className="text-base font-bold text-text-primary border-b-2 border-primary pb-2 mb-4 uppercase tracking-wide">
-                    New Arrivals
-                  </h3>
-                  <ProductTabs />
-                </div>
-
-                {/* Trending column */}
-                <div>
-                  <h3 className="text-base font-bold text-text-primary border-b-2 border-primary pb-2 mb-4 uppercase tracking-wide">
-                    Trending
-                  </h3>
-                  <ProductTabs />
-                </div>
-
-                {/* Top Rated column */}
-                <div>
-                  <h3 className="text-base font-bold text-text-primary border-b-2 border-primary pb-2 mb-4 uppercase tracking-wide">
-                    Top Rated
-                  </h3>
-                  <ProductTabs />
-                </div>
-              </div>
+              <ProductTabs />
             </div>
           </div>
         </div>
@@ -107,7 +78,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {FEATURED_PRODUCTS.map((product) => (
+            {featuredProducts.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
@@ -152,8 +123,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Best Sellers Section */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold text-text-primary">Best Sellers</h2>
+            <Link href="/shop" className="text-sm text-primary hover:text-primary-dark font-medium transition-colors">
+              View All →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+            {ALL_PRODUCTS.filter(p => p.rating >= 4).slice(0, 4).map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Newsletter */}
-      <section className="py-14 bg-white">
+      <section className="py-14 bg-surface">
         <div className="container mx-auto px-4">
           <div className="relative rounded-2xl overflow-hidden bg-primary-light flex flex-col md:flex-row items-center gap-8 px-8 py-12">
             {/* Newsletter Image */}
