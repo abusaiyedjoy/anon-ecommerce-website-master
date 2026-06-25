@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
@@ -9,8 +10,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Mail, Lock, Eye, EyeOff, User, Phone } from 'lucide-react'
 
 export default function RegisterPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -29,7 +33,42 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Register:', formData)
+    setError('')
+    setSuccess('')
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    try {
+      const usersStr = localStorage.getItem('anon_users') || '[]'
+      const users = JSON.parse(usersStr)
+
+      const exists = users.some((u: any) => u.email.toLowerCase() === formData.email.toLowerCase())
+      if (exists) {
+        setError('An account with this email already exists')
+        return
+      }
+
+      const newUser = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+      }
+
+      users.push(newUser)
+      localStorage.setItem('anon_users', JSON.stringify(users))
+
+      setSuccess('Account created successfully! Redirecting to login...')
+      setTimeout(() => {
+        router.push('/login')
+      }, 1500)
+    } catch (err) {
+      setError('An error occurred. Please try again.')
+    }
   }
 
   return (
@@ -42,6 +81,16 @@ export default function RegisterPage() {
           </CardHeader>
 
           <CardContent>
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-sm text-sm font-medium">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-600 rounded-sm text-sm font-medium">
+                {success}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Name Fields */}
               <div className="grid grid-cols-2 gap-4">

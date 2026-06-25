@@ -20,8 +20,8 @@ export default function Navbar() {
 
   return (
     <nav className="site-navbar hidden md:block">
-      <div className="container mx-auto px-4">
-        <ul className="flex items-center gap-1">
+      <div className="w-full max-w-full px-8">
+        <ul className="flex items-center justify-center gap-8 py-1">
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href
             return (

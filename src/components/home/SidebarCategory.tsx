@@ -27,7 +27,7 @@ export default function SidebarCategory() {
   const [expanded, setExpanded] = useState<string | null>(null)
 
   return (
-    <aside className="w-64 flex-shrink-0">
+    <aside className="hidden lg:block w-64 flex-shrink-0">
       {/* Category Section */}
       <div className="mb-6">
         <h3 className="text-sm font-bold text-text-primary uppercase tracking-widest mb-3 pb-2 border-b border-border">

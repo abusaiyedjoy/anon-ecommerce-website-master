@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Trash2, Plus, Minus, ShoppingBag, ChevronRight, Tag, ArrowRight } from 'lucide-react'
@@ -25,24 +25,62 @@ const INITIAL_CART: CartItem[] = [
 ]
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(INITIAL_CART)
+  const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [coupon, setCoupon] = useState('')
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    try {
+      let cartStr = localStorage.getItem('anon_cart')
+      if (!cartStr) {
+        localStorage.setItem('anon_cart', JSON.stringify(INITIAL_CART))
+        cartStr = JSON.stringify(INITIAL_CART)
+      }
+      setCartItems(JSON.parse(cartStr))
+    } catch (e) {
+      console.error(e)
+    }
+    setIsMounted(true)
+  }, [])
+
+  const saveCart = (items: CartItem[]) => {
+    try {
+      localStorage.setItem('anon_cart', JSON.stringify(items))
+      window.dispatchEvent(new Event('cart-updated'))
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   const updateQty = (id: string, delta: number) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-      )
+    const updated = cartItems.map((item) =>
+      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
     )
+    setCartItems(updated)
+    saveCart(updated)
   }
 
   const removeItem = (id: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id))
+    const updated = cartItems.filter((item) => item.id !== id)
+    setCartItems(updated)
+    saveCart(updated)
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const shipping = subtotal >= 55 ? 0 : 5.99
   const total = subtotal + shipping
+
+  if (!isMounted) {
+    return (
+      <div className="bg-surface min-h-screen py-8 flex items-center justify-center">
+        <div className="text-center py-24">
+          <ShoppingBag size={56} className="mx-auto mb-4 text-gray-300 animate-pulse" />
+          <h3 className="text-lg font-semibold text-text-primary">Loading cart...</h3>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-surface min-h-screen py-8">
@@ -212,9 +250,9 @@ export default function CartPage() {
                   <span>Total</span>
                   <span className="text-primary">${total.toFixed(2)}</span>
                 </div>
-                <button className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-bold text-sm py-3 rounded-sm transition-colors uppercase tracking-wide">
+                <Link href="/checkout" className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-bold text-sm py-3 rounded-sm transition-colors uppercase tracking-wide">
                   Proceed to Checkout <ArrowRight size={16} />
-                </button>
+                </Link>
               </div>
             </div>
           </div>

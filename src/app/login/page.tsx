@@ -1,21 +1,69 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
-export default function LoginPage() {
+function LoginForm() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectUrl = searchParams.get('redirect') || '/'
+
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Login:', { email, password })
+    setError('')
+    setSuccess('')
+
+    try {
+      let authenticatedUser = null
+
+      if (email.toLowerCase() === 'admin@anon.com' && password === 'password123') {
+        authenticatedUser = {
+          firstName: 'Admin',
+          lastName: 'Demo',
+          email: 'admin@anon.com',
+          phone: '+1 (555) 123-4567',
+        }
+      } else {
+        const usersStr = localStorage.getItem('anon_users') || '[]'
+        const users = JSON.parse(usersStr)
+        const user = users.find(
+          (u: any) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+        )
+        if (user) {
+          authenticatedUser = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone || '',
+          }
+        }
+      }
+
+      if (authenticatedUser) {
+        localStorage.setItem('anon_currentUser', JSON.stringify(authenticatedUser))
+        window.dispatchEvent(new Event('auth-updated'))
+        setSuccess('Logged in successfully! Redirecting...')
+        setTimeout(() => {
+          router.push(redirectUrl)
+        }, 1000)
+      } else {
+        setError('Invalid email or password. (Hint: Register first or use admin@anon.com / password123)')
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.')
+    }
   }
 
   return (
@@ -28,6 +76,16 @@ export default function LoginPage() {
           </CardHeader>
 
           <CardContent>
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-sm text-sm font-medium">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-600 rounded-sm text-sm font-medium">
+                {success}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email */}
               <div className="space-y-2">
@@ -123,5 +181,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <p className="text-sm text-text-secondary font-medium animate-pulse">Loading login...</p>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
