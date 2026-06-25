@@ -1,271 +1,197 @@
-'use client'
-
+import HeroBanner from '@/components/home/HeroBanner'
+import CategoryBar from '@/components/home/CategoryBar'
+import SidebarCategory from '@/components/home/SidebarCategory'
+import ProductTabs from '@/components/home/ProductTabs'
+import ProductCard from '@/components/product/ProductCard'
 import Link from 'next/link'
-import ProductCard from '@/components/ProductCard'
-import { Button } from '@/components/ui/Button'
-import { ArrowRight, Star, Truck, Shield, Clock } from 'lucide-react'
+import Image from 'next/image'
+import { Truck, Shield, Clock, Star } from 'lucide-react'
 
 const FEATURED_PRODUCTS = [
-  {
-    id: '1',
-    image: '/assets/images/products/1.jpg',
-    title: 'Baby Fabric Shoes',
-    price: 4.0,
-    originalPrice: 5.0,
-    category: 'Shoes',
-    rating: 4,
-    reviews: 12,
-  },
-  {
-    id: '2',
-    image: '/assets/images/products/2.jpg',
-    title: "Men's Hoodies T-Shirt",
-    price: 7.0,
-    originalPrice: 17.0,
-    category: 'Shirts',
-    rating: 5,
-    reviews: 8,
-  },
-  {
-    id: '3',
-    image: '/assets/images/products/3.jpg',
-    title: 'Girls T-Shirt',
-    price: 3.0,
-    originalPrice: 5.0,
-    category: 'Shirts',
-    rating: 4,
-    reviews: 5,
-  },
-  {
-    id: '4',
-    image: '/assets/images/products/4.jpg',
-    title: 'Woolen Hat for Men',
-    price: 15.0,
-    originalPrice: 25.0,
-    category: 'Accessories',
-    rating: 3,
-    reviews: 3,
-    badge: 'New',
-  },
-  {
-    id: '5',
-    image: '/assets/images/products/sports-1.jpg',
-    title: 'Running & Trekking Shoes - White',
-    price: 49.0,
-    originalPrice: 15.0,
-    category: 'Sports',
-    rating: 5,
-    reviews: 20,
-  },
-  {
-    id: '6',
-    image: '/assets/images/products/sports-2.jpg',
-    title: 'Trekking & Running Shoes - black',
-    price: 78.0,
-    originalPrice: 36.0,
-    category: 'Sports',
-    rating: 4,
-    reviews: 15,
-  },
-  {
-    id: '7',
-    image: '/assets/images/products/watch-1.jpg',
-    title: 'Smart Watch Vital Plus',
-    price: 180.0,
-    originalPrice: 250.0,
-    category: 'Electronics',
-    rating: 4,
-    reviews: 18,
-  },
-  {
-    id: '8',
-    image: '/assets/images/products/jewellery-1.jpg',
-    title: 'Rose Gold Earrings',
-    price: 25.0,
-    originalPrice: 45.0,
-    category: 'Jewelry',
-    rating: 5,
-    reviews: 10,
-    badge: 'Sale',
-  },
+  { id: '1', image: '/assets/images/products/jacket-1.jpg', title: 'Mens Winter Leathers Jackets', price: 48.0, originalPrice: 75.0, category: 'Jacket', rating: 3, reviews: 8 },
+  { id: '2', image: '/assets/images/products/shirt-1.jpg', title: 'Pure Garment Dyed Cotton Shirt', price: 45.0, originalPrice: 56.0, category: 'Shirt', rating: 3, reviews: 5, badge: 'Sale' },
+  { id: '3', image: '/assets/images/products/jacket-2.jpg', title: 'MEN Yarn Fleece Full-Zip Jacket', price: 58.0, originalPrice: 65.0, category: 'Jacket', rating: 3, reviews: 12 },
+  { id: '4', image: '/assets/images/products/clothes-4.jpg', title: 'Black Floral Wrap Midi Skirt', price: 25.0, originalPrice: 35.0, category: 'Skirt', rating: 5, reviews: 20, badge: 'New' },
+  { id: '5', image: '/assets/images/products/shoe-1.jpg', title: "Casual Men's Brown Shoes", price: 99.0, originalPrice: 105.0, category: 'Casual', rating: 5, reviews: 18 },
+  { id: '6', image: '/assets/images/products/watch-2.jpg', title: 'Pocket Watch Leather Pouch', price: 150.0, originalPrice: 170.0, category: 'Watches', rating: 3, reviews: 6, badge: 'Sale' },
+  { id: '7', image: '/assets/images/products/watch-1.jpg', title: 'Smart Watche Vital Plus', price: 100.0, originalPrice: 120.0, category: 'Watches', rating: 4, reviews: 14 },
+  { id: '8', image: '/assets/images/products/party-wear-1.jpg', title: 'Womens Party Wear Shoes', price: 25.0, originalPrice: 30.0, category: 'Party Wear', rating: 3, reviews: 9, badge: 'Sale' },
+]
+
+const FEATURES = [
+  { icon: Truck, title: 'Free Shipping', desc: 'On orders over $55', color: 'text-blue-500' },
+  { icon: Shield, title: 'Secure Payment', desc: '100% protected', color: 'text-green-500' },
+  { icon: Clock, title: 'Fast Delivery', desc: 'Usually 3–5 days', color: 'text-orange-500' },
+  { icon: Star, title: 'Great Deals', desc: 'Daily discounts', color: 'text-purple-500' },
 ]
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero/Banner Section */}
-      <section className="bg-gradient-to-r from-orange-50 via-pink-50 to-orange-50 py-12 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid gap-8 lg:grid-cols-2 items-center">
-            {/* Left Content */}
-            <div className="max-w-xl">
-              <p className="text-pink-500 font-semibold text-sm uppercase tracking-wider mb-3">
-                Trending Item
-              </p>
-              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4 leading-tight">
-                Women's Latest Fashion Sale
-              </h1>
-              <p className="text-xl text-slate-600 mb-8">
-                starting at <span className="font-bold text-2xl text-slate-900">$</span> <span className="font-bold text-2xl text-slate-900">20</span>.00
-              </p>
-              <Button size="lg" className="bg-pink-500 hover:bg-pink-600 text-white font-bold">
-                SHOP NOW
-              </Button>
-            </div>
+    <>
+      {/* Hero Banner */}
+      <HeroBanner />
 
-            {/* Right Image Area */}
-            <div className="relative h-96 md:h-full min-h-80">
-              <div className="relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-orange-200 via-pink-200 to-orange-200 flex items-center justify-center">
-                {/* Placeholder for banner image */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center opacity-30">
-                    <p className="text-white text-2xl font-bold">Women's Fashion</p>
-                    <p className="text-white text-lg">Image</p>
-                  </div>
+      {/* Features Bar */}
+      <section className="py-5 bg-white border-b border-border">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {FEATURES.map(({ icon: Icon, title, desc, color }) => (
+              <div key={title} className="flex items-center gap-3">
+                <div className={`${color} flex-shrink-0`}>
+                  <Icon size={28} />
                 </div>
-                {/* Decorative elements */}
-                <div className="absolute top-10 right-10 w-20 h-20 border-4 border-orange-300 rounded-full opacity-20"></div>
-                <div className="absolute bottom-10 left-10 w-32 h-32 bg-pink-300 rounded-full opacity-10"></div>
+                <div>
+                  <p className="text-sm font-semibold text-text-primary">{title}</p>
+                  <p className="text-xs text-text-secondary">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Category Bar */}
+      <CategoryBar />
+
+      {/* Main Content: Sidebar + Product Tabs */}
+      <section className="py-10 bg-surface">
+        <div className="container mx-auto px-4">
+          <div className="flex gap-8">
+            {/* Left Sidebar */}
+            <SidebarCategory />
+
+            {/* Right: Tabbed Products */}
+            <div className="flex-1 min-w-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* New Arrivals column */}
+                <div>
+                  <h3 className="text-base font-bold text-text-primary border-b-2 border-primary pb-2 mb-4 uppercase tracking-wide">
+                    New Arrivals
+                  </h3>
+                  <ProductTabs />
+                </div>
+
+                {/* Trending column */}
+                <div>
+                  <h3 className="text-base font-bold text-text-primary border-b-2 border-primary pb-2 mb-4 uppercase tracking-wide">
+                    Trending
+                  </h3>
+                  <ProductTabs />
+                </div>
+
+                {/* Top Rated column */}
+                <div>
+                  <h3 className="text-base font-bold text-text-primary border-b-2 border-primary pb-2 mb-4 uppercase tracking-wide">
+                    Top Rated
+                  </h3>
+                  <ProductTabs />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-12 bg-slate-50">
+      {/* New Products Grid */}
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="flex items-start gap-4">
-              <Truck className="h-8 w-8 text-blue-600 flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-1">Free Shipping</h3>
-                <p className="text-sm text-slate-600">On orders over $50</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <Shield className="h-8 w-8 text-blue-600 flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-1">Secure Payment</h3>
-                <p className="text-sm text-slate-600">100% protected</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <Clock className="h-8 w-8 text-blue-600 flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-1">Fast Delivery</h3>
-                <p className="text-sm text-slate-600">Usually 3-5 days</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <Star className="h-8 w-8 text-blue-600 flex-shrink-0 mt-1" />
-              <div>
-                <h3 className="font-semibold text-slate-900 mb-1">Great Deals</h3>
-                <p className="text-sm text-slate-600">Daily discounts</p>
-              </div>
-            </div>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold text-text-primary">
+              New Products
+            </h2>
+            <Link
+              href="/shop"
+              className="text-sm text-primary hover:text-primary-dark font-medium transition-colors"
+            >
+              View All →
+            </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Featured Products */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-4xl font-bold text-slate-900 mb-2">Featured Products</h2>
-              <p className="text-slate-600">Check out our best-selling items</p>
-            </div>
-            <Button variant="outline" asChild className="hidden sm:flex">
-              <Link href="/shop">
-                View All
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {FEATURED_PRODUCTS.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
-
-          <div className="mt-8 text-center sm:hidden">
-            <Button asChild>
-              <Link href="/shop">
-                View All Products
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">Special Offers Available!</h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Get up to 50% off on selected items. Limited time only!
-          </p>
-          <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50" asChild>
-            <Link href="/shop">
-              Shop Sale
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-16 bg-slate-50">
+      {/* Banners Row */}
+      <section className="py-8 bg-surface">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-slate-900 mb-12 text-center">Shop by Category</h2>
-          
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { name: 'Fashion', color: 'from-pink-500 to-pink-600' },
-              { name: 'Electronics', color: 'from-blue-500 to-blue-600' },
-              { name: 'Accessories', color: 'from-purple-500 to-purple-600' },
-            ].map((category) => (
-              <Link
-                key={category.name}
-                href={`/shop?category=${category.name}`}
-                className={`relative h-48 rounded-lg overflow-hidden group cursor-pointer`}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-90 group-hover:opacity-100 transition-opacity`}></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <h3 className="text-2xl font-bold">{category.name}</h3>
-                    <p className="text-sm mt-2 opacity-80">Browse collection</p>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="relative h-44 rounded-lg overflow-hidden group">
+              <Image src="/assets/images/mens-banner.jpg" alt="Men's Collection" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-black/30 flex items-end p-4">
+                <div>
+                  <p className="text-white text-xs font-semibold uppercase tracking-widest">Men&apos;s</p>
+                  <p className="text-white font-bold text-lg">Collection</p>
+                  <Link href="/shop?gender=mens" className="text-primary text-xs font-semibold mt-1 block hover:underline">Shop Now →</Link>
                 </div>
-              </Link>
-            ))}
+              </div>
+            </div>
+            <div className="relative h-44 rounded-lg overflow-hidden group">
+              <Image src="/assets/images/womens-banner.jpg" alt="Women's Collection" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-black/30 flex items-end p-4">
+                <div>
+                  <p className="text-white text-xs font-semibold uppercase tracking-widest">Women&apos;s</p>
+                  <p className="text-white font-bold text-lg">Collection</p>
+                  <Link href="/shop?gender=womens" className="text-primary text-xs font-semibold mt-1 block hover:underline">Shop Now →</Link>
+                </div>
+              </div>
+            </div>
+            <div className="relative h-44 rounded-lg overflow-hidden group">
+              <Image src="/assets/images/electronics-banner-1.jpg" alt="Electronics" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-black/30 flex items-end p-4">
+                <div>
+                  <p className="text-white text-xs font-semibold uppercase tracking-widest">Electronics</p>
+                  <p className="text-white font-bold text-lg">Collection</p>
+                  <Link href="/shop?category=electronics" className="text-primary text-xs font-semibold mt-1 block hover:underline">Shop Now →</Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-16">
+      {/* Newsletter */}
+      <section className="py-14 bg-white">
         <div className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-12 text-center">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Subscribe to Our Newsletter</h2>
-            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-              Get the latest updates on new products and upcoming sales delivered right to your inbox.
-            </p>
-            <form className="max-w-md mx-auto flex gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 rounded-lg border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                required
+          <div className="relative rounded-2xl overflow-hidden bg-primary-light flex flex-col md:flex-row items-center gap-8 px-8 py-12">
+            {/* Newsletter Image */}
+            <div className="relative w-full md:w-56 h-44 flex-shrink-0 hidden md:block rounded-xl overflow-hidden">
+              <Image
+                src="/assets/images/newsletter.png"
+                alt="Newsletter"
+                fill
+                className="object-cover object-center"
               />
-              <Button>Subscribe</Button>
-            </form>
+            </div>
+            {/* Content */}
+            <div className="flex-1 text-center md:text-left">
+              <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-1">Newsletter</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">
+                Subscribe to Our Newsletter
+              </h2>
+              <p className="text-sm text-text-secondary mb-6">
+                Get the latest updates on new products and upcoming sales.
+              </p>
+              <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto md:mx-0">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="flex-1 px-4 py-2.5 rounded-sm border border-border text-sm focus:outline-none focus:border-primary"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="bg-primary hover:bg-primary-dark text-white font-semibold text-sm px-6 py-2.5 rounded-sm transition-colors uppercase tracking-wide"
+                >
+                  Subscribe
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </section>
-    </main>
+    </>
   )
 }

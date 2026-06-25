@@ -1,100 +1,29 @@
 'use client'
 
 import { useState } from 'react'
-import ProductCard from '@/components/ProductCard'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
-import { Slider } from '@/components/ui/Slider'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Filter, Search, Grid3X3, List } from 'lucide-react'
+import ProductCard from '@/components/product/ProductCard'
+import ShopSidebar from '@/components/shop/ShopSidebar'
+import ShopToolbar from '@/components/shop/ShopToolbar'
+import { Search } from 'lucide-react'
 
-// Mock product data
-const PRODUCTS = [
-  {
-    id: '1',
-    image: '/assets/images/products/1.jpg',
-    title: 'Baby Fabric Shoes',
-    price: 4.0,
-    originalPrice: 5.0,
-    category: 'Shoes',
-    rating: 4,
-    reviews: 12,
-  },
-  {
-    id: '2',
-    image: '/assets/images/products/2.jpg',
-    title: "Men's Hoodies T-Shirt",
-    price: 7.0,
-    originalPrice: 17.0,
-    category: 'Shirts',
-    rating: 5,
-    reviews: 8,
-  },
-  {
-    id: '3',
-    image: '/assets/images/products/3.jpg',
-    title: 'Girls T-Shirt',
-    price: 3.0,
-    originalPrice: 5.0,
-    category: 'Shirts',
-    rating: 4,
-    reviews: 5,
-  },
-  {
-    id: '4',
-    image: '/assets/images/products/4.jpg',
-    title: 'Woolen Hat for Men',
-    price: 15.0,
-    originalPrice: 25.0,
-    category: 'Accessories',
-    rating: 3,
-    reviews: 3,
-    badge: 'New',
-  },
-  {
-    id: '5',
-    image: '/assets/images/products/sports-1.jpg',
-    title: 'Running & Trekking Shoes - White',
-    price: 49.0,
-    originalPrice: 15.0,
-    category: 'Sports',
-    rating: 5,
-    reviews: 20,
-  },
-  {
-    id: '6',
-    image: '/assets/images/products/sports-2.jpg',
-    title: 'Trekking & Running Shoes - black',
-    price: 78.0,
-    originalPrice: 36.0,
-    category: 'Sports',
-    rating: 4,
-    reviews: 15,
-  },
-  {
-    id: '7',
-    image: '/assets/images/products/watch-1.jpg',
-    title: 'Smart Watch Vital Plus',
-    price: 180.0,
-    originalPrice: 250.0,
-    category: 'Electronics',
-    rating: 4,
-    reviews: 18,
-  },
-  {
-    id: '8',
-    image: '/assets/images/products/jewellery-1.jpg',
-    title: 'Rose Gold Earrings',
-    price: 25.0,
-    originalPrice: 45.0,
-    category: 'Jewelry',
-    rating: 5,
-    reviews: 10,
-    badge: 'Sale',
-  },
+const ALL_PRODUCTS = [
+  { id: '1', image: '/assets/images/products/jacket-1.jpg', title: 'Mens Winter Leathers Jackets', price: 48.0, originalPrice: 75.0, category: 'Clothes', rating: 3, reviews: 8, badge: '15%' },
+  { id: '2', image: '/assets/images/products/shirt-1.jpg', title: 'Pure Garment Dyed Cotton Shirt', price: 45.0, originalPrice: 56.0, category: 'Clothes', rating: 3, reviews: 5, badge: 'Sale' },
+  { id: '3', image: '/assets/images/products/jacket-2.jpg', title: 'MEN Yarn Fleece Full-Zip Jacket', price: 58.0, originalPrice: 65.0, category: 'Clothes', rating: 3, reviews: 12 },
+  { id: '4', image: '/assets/images/products/clothes-4.jpg', title: 'Black Floral Wrap Midi Skirt', price: 25.0, originalPrice: 35.0, category: 'Clothes', rating: 5, reviews: 20, badge: 'New' },
+  { id: '5', image: '/assets/images/products/shoe-1.jpg', title: "Casual Men's Brown Shoes", price: 99.0, originalPrice: 105.0, category: 'Footwear', rating: 5, reviews: 18 },
+  { id: '6', image: '/assets/images/products/watch-2.jpg', title: 'Pocket Watch Leather Pouch', price: 150.0, originalPrice: 170.0, category: 'Jewelry', rating: 3, reviews: 6, badge: 'Sale' },
+  { id: '7', image: '/assets/images/products/watch-1.jpg', title: 'Smart Watch Vital Plus', price: 100.0, originalPrice: 120.0, category: 'Jewelry', rating: 4, reviews: 14 },
+  { id: '8', image: '/assets/images/products/party-wear-1.jpg', title: 'Womens Party Wear Shoes', price: 25.0, originalPrice: 30.0, category: 'Footwear', rating: 3, reviews: 9, badge: 'Sale' },
+  { id: '9', image: '/assets/images/products/jacket-3.jpg', title: 'Brown Casual Bomber Jacket', price: 78.0, originalPrice: 110.0, category: 'Clothes', rating: 4, reviews: 11 },
+  { id: '10', image: '/assets/images/products/sports-1.jpg', title: 'Running & Trekking Shoes - White', price: 49.0, originalPrice: 65.0, category: 'Footwear', rating: 5, reviews: 24 },
+  { id: '11', image: '/assets/images/products/sports-2.jpg', title: 'Trekking Running Shoes Black', price: 78.0, originalPrice: 95.0, category: 'Footwear', rating: 4, reviews: 16 },
+  { id: '12', image: '/assets/images/products/jewellery-1.jpg', title: 'Rose Gold Earrings Set', price: 25.0, originalPrice: 45.0, category: 'Jewelry', rating: 5, reviews: 10, badge: 'Sale' },
+  { id: '13', image: '/assets/images/products/jacket-4.jpg', title: 'Men Slim Fit Formal Jacket', price: 120.0, originalPrice: 160.0, category: 'Clothes', rating: 4, reviews: 7 },
+  { id: '14', image: '/assets/images/products/shoe-2.jpg', title: 'High Heel Party Wear Sandals', price: 55.0, originalPrice: 80.0, category: 'Footwear', rating: 3, reviews: 5, badge: 'Sale' },
+  { id: '15', image: '/assets/images/products/perfume.jpg', title: 'Luxury Eau de Parfum 100ml', price: 75.0, originalPrice: 110.0, category: 'Perfume', rating: 5, reviews: 32 },
+  { id: '16', image: '/assets/images/products/jewellery-2.jpg', title: 'Sterling Silver Bracelet', price: 38.0, originalPrice: 55.0, category: 'Jewelry', rating: 4, reviews: 8 },
 ]
-
-const CATEGORIES = ['All', 'Shoes', 'Shirts', 'Accessories', 'Sports', 'Electronics', 'Jewelry']
 
 export default function ShopPage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -103,169 +32,100 @@ export default function ShopPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [sortBy, setSortBy] = useState('featured')
 
-  // Filter products
-  const filteredProducts = PRODUCTS.filter((product) => {
-    const matchSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchCategory = selectedCategory === 'All' || product.category === selectedCategory
-    const matchPrice = product.price >= priceRange[0] && product.price <= priceRange[1]
-    return matchSearch && matchCategory && matchPrice
+  const filtered = ALL_PRODUCTS.filter((p) => {
+    const matchSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchCat = selectedCategory === 'All' || p.category === selectedCategory
+    const matchPrice = p.price >= priceRange[0] && p.price <= priceRange[1]
+    return matchSearch && matchCat && matchPrice
   })
 
-  // Sort products
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
+  const sorted = [...filtered].sort((a, b) => {
     switch (sortBy) {
-      case 'price-low':
-        return a.price - b.price
-      case 'price-high':
-        return b.price - a.price
-      case 'newest':
-        return 0 // In real app, would sort by date
-      default:
-        return 0
+      case 'price-low': return a.price - b.price
+      case 'price-high': return b.price - a.price
+      case 'rating': return (b.rating || 0) - (a.rating || 0)
+      default: return 0
     }
   })
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className="bg-surface min-h-screen py-8">
       <div className="container mx-auto px-4">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Shop</h1>
-          <p className="text-slate-600">Browse our collection of premium products</p>
+        <div className="mb-6">
+          <nav className="text-xs text-text-secondary mb-2">
+            <span>Home</span>
+            <span className="mx-1">/</span>
+            <span className="text-text-primary font-medium">Shop</span>
+          </nav>
+          <h1 className="text-2xl font-bold text-text-primary">Shop</h1>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-4">
-          {/* Sidebar - Filters */}
-          <div className="space-y-6">
-            {/* Search */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Search</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="relative">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                  <Input
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Categories */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Categories</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {CATEGORIES.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`block w-full text-left px-3 py-2 rounded-md transition-colors ${
-                      selectedCategory === category
-                        ? 'bg-blue-600 text-white'
-                        : 'hover:bg-slate-100 text-slate-700'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Price Range */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Price Range</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <Slider
-                    min={0}
-                    max={500}
-                    step={10}
-                    value={priceRange}
-                    onValueChange={setPriceRange}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-sm text-slate-600">
-                    <span>${priceRange[0]}</span>
-                    <span>${priceRange[1]}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        <div className="flex gap-7">
+          {/* Sidebar */}
+          <div className="w-64 flex-shrink-0 hidden lg:block">
+            <ShopSidebar
+              selectedCategory={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+              priceRange={priceRange}
+              onPriceChange={setPriceRange}
+            />
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
-            {/* Top Bar */}
-            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-slate-600">
-                Showing {sortedProducts.length} products
-              </p>
-
-              <div className="flex gap-4">
-                {/* Sort */}
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-                >
-                  <option value="featured">Featured</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="newest">Newest</option>
-                </select>
-
-                {/* View Mode */}
-                <div className="flex gap-2 border border-slate-300 rounded-md p-1">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded ${
-                      viewMode === 'grid'
-                        ? 'bg-slate-200 text-slate-900'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded ${
-                      viewMode === 'list'
-                        ? 'bg-slate-200 text-slate-900'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    <List className="h-4 w-4" />
-                  </button>
-                </div>
+          <div className="flex-1 min-w-0">
+            {/* Search */}
+            <div className="mb-5">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 border border-border rounded-sm text-sm focus:outline-none focus:border-primary bg-white"
+                />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
               </div>
             </div>
 
-            {/* Products Grid */}
-            {sortedProducts.length > 0 ? (
+            {/* Heading */}
+            <h2 className="text-lg font-bold text-text-primary mb-4">
+              New Products
+            </h2>
+
+            {/* Toolbar */}
+            <ShopToolbar
+              totalCount={sorted.length}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
+
+            {/* Products */}
+            {sorted.length > 0 ? (
               <div
                 className={
                   viewMode === 'grid'
-                    ? 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3'
+                    ? 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5'
                     : 'space-y-4'
                 }
               >
-                {sortedProducts.map((product) => (
-                  <ProductCard key={product.id} {...product} />
+                {sorted.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    {...product}
+                    className={viewMode === 'list' ? 'flex flex-row' : ''}
+                  />
                 ))}
               </div>
             ) : (
-              <div className="rounded-lg border border-slate-200 bg-white p-12 text-center">
-                <Filter className="mx-auto mb-4 h-12 w-12 text-slate-400" />
-                <h3 className="mb-2 text-lg font-semibold text-slate-900">No products found</h3>
-                <p className="text-slate-600">Try adjusting your filters to find what you're looking for.</p>
+              <div className="text-center py-20 bg-white rounded-lg border border-border">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-light flex items-center justify-center">
+                  <Search size={24} className="text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold text-text-primary mb-2">No products found</h3>
+                <p className="text-sm text-text-secondary">Try adjusting your filters or search query.</p>
               </div>
             )}
           </div>

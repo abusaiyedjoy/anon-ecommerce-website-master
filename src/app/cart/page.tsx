@@ -1,249 +1,223 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Input } from '@/components/ui/Input'
-import { Trash2, ShoppingBag, ArrowRight } from 'lucide-react'
-import { useState } from 'react'
+import { Trash2, Plus, Minus, ShoppingBag, ChevronRight, Tag, ArrowRight } from 'lucide-react'
+import { StarRating } from '@/components/ui/StarRating'
 
 interface CartItem {
   id: string
   title: string
-  image: string
+  category: string
   price: number
+  originalPrice: number
+  image: string
+  size: string
+  color: string
   quantity: number
+  rating: number
 }
 
-export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: '1',
-      title: 'Baby Fabric Shoes',
-      image: '/assets/images/products/1.jpg',
-      price: 4.0,
-      quantity: 2,
-    },
-    {
-      id: '2',
-      title: "Men's Hoodies T-Shirt",
-      image: '/assets/images/products/2.jpg',
-      price: 7.0,
-      quantity: 1,
-    },
-  ])
+const INITIAL_CART: CartItem[] = [
+  { id: '1', title: 'Mens Winter Leathers Jackets', category: 'Jacket', price: 48.0, originalPrice: 75.0, image: '/assets/images/products/jacket-1.jpg', size: 'L', color: '#1A1A2E', quantity: 1, rating: 4 },
+  { id: '2', title: 'Pure Garment Dyed Cotton Shirt', category: 'Shirt', price: 45.0, originalPrice: 56.0, image: '/assets/images/products/shirt-1.jpg', size: 'M', color: '#FFFFFF', quantity: 2, rating: 3 },
+]
 
+export default function CartPage() {
+  const [cartItems, setCartItems] = useState<CartItem[]>(INITIAL_CART)
   const [coupon, setCoupon] = useState('')
 
-  const updateQuantity = (id: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeItem(id)
-    } else {
-      setCartItems(
-        cartItems.map((item) =>
-          item.id === id ? { ...item, quantity } : item
-        )
+  const updateQty = (id: string, delta: number) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
       )
-    }
+    )
   }
 
   const removeItem = (id: string) => {
-    setCartItems(cartItems.filter((item) => item.id !== id))
+    setCartItems((prev) => prev.filter((item) => item.id !== id))
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shipping = subtotal > 50 ? 0 : 5
-  const tax = subtotal * 0.08
-  const total = subtotal + shipping + tax
+  const shipping = subtotal >= 55 ? 0 : 5.99
+  const total = subtotal + shipping
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className="bg-surface min-h-screen py-8">
       <div className="container mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Shopping Cart</h1>
-          <p className="text-slate-600">
-            You have {cartItems.length} item{cartItems.length !== 1 ? 's' : ''} in your cart
-          </p>
-        </div>
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-1 text-xs text-text-secondary mb-6">
+          <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+          <ChevronRight size={12} />
+          <span className="text-text-primary font-medium">Shopping Cart</span>
+        </nav>
 
-        {cartItems.length > 0 ? (
-          <div className="grid gap-8 lg:grid-cols-3">
+        <h1 className="text-2xl font-bold text-text-primary mb-8">Shopping Cart</h1>
+
+        {cartItems.length === 0 ? (
+          <div className="text-center py-24 bg-white rounded-xl border border-border">
+            <ShoppingBag size={56} className="mx-auto mb-4 text-gray-300" />
+            <h3 className="text-xl font-semibold text-text-primary mb-2">Your cart is empty</h3>
+            <p className="text-sm text-text-secondary mb-6">Looks like you haven&apos;t added anything yet.</p>
+            <Link
+              href="/shop"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold text-sm px-8 py-3 rounded-sm transition-colors uppercase tracking-wide"
+            >
+              Continue Shopping <ArrowRight size={16} />
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
+              {/* Table Header */}
+              <div className="hidden md:grid grid-cols-12 gap-4 text-xs font-semibold uppercase tracking-widest text-text-secondary pb-3 border-b border-border">
+                <div className="col-span-6">Product</div>
+                <div className="col-span-2 text-center">Price</div>
+                <div className="col-span-2 text-center">Qty</div>
+                <div className="col-span-2 text-right">Total</div>
+              </div>
+
               {cartItems.map((item) => (
-                <Card key={item.id}>
-                  <CardContent className="p-6">
-                    <div className="flex gap-6">
-                      {/* Image */}
-                      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg bg-slate-100">
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-
-                      {/* Details */}
-                      <div className="flex-1">
-                        <div className="flex justify-between mb-2">
-                          <Link
-                            href={`/product/${item.id}`}
-                            className="font-semibold text-slate-900 hover:text-blue-600 transition-colors"
-                          >
-                            {item.title}
-                          </Link>
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="text-slate-400 hover:text-red-600 transition-colors"
-                          >
-                            <Trash2 className="h-5 w-5" />
-                          </button>
+                <div key={item.id} className="bg-white rounded-lg border border-border p-4">
+                  <div className="md:grid md:grid-cols-12 md:gap-4 md:items-center flex flex-col gap-4">
+                    {/* Product */}
+                    <div className="col-span-6 flex items-center gap-4">
+                      <Link href={`/product/${item.id}`} className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-surface">
+                        <Image src={item.image} alt={item.title} fill className="object-cover" />
+                      </Link>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-semibold text-primary uppercase tracking-widest mb-0.5">
+                          {item.category}
+                        </p>
+                        <Link href={`/product/${item.id}`} className="text-sm font-medium text-text-primary hover:text-primary transition-colors line-clamp-2">
+                          {item.title}
+                        </Link>
+                        <StarRating rating={item.rating} size="sm" className="my-1" />
+                        <div className="flex items-center gap-3 text-xs text-text-secondary">
+                          <span>Size: <strong>{item.size}</strong></span>
+                          <span className="flex items-center gap-1">
+                            Color: <span className="inline-block w-3 h-3 rounded-full border border-border ml-1" style={{ backgroundColor: item.color }} />
+                          </span>
                         </div>
-
-                        <div className="flex items-center justify-between">
-                          {/* Quantity */}
-                          <div className="flex items-center border border-slate-300 rounded-lg">
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity - 1)
-                              }
-                              className="px-3 py-1 text-slate-600 hover:bg-slate-100"
-                            >
-                              −
-                            </button>
-                            <span className="w-8 text-center text-sm font-medium">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
-                              className="px-3 py-1 text-slate-600 hover:bg-slate-100"
-                            >
-                              +
-                            </button>
-                          </div>
-
-                          {/* Price */}
-                          <div className="text-right">
-                            <p className="text-sm text-slate-600">
-                              ${item.price.toFixed(2)} each
-                            </p>
-                            <p className="font-semibold text-slate-900">
-                              ${(item.price * item.quantity).toFixed(2)}
-                            </p>
-                          </div>
-                        </div>
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="flex items-center gap-1 text-xs text-red-400 hover:text-red-600 transition-colors mt-1"
+                        >
+                          <Trash2 size={12} /> Remove
+                        </button>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+
+                    {/* Price */}
+                    <div className="col-span-2 text-center">
+                      <p className="text-sm font-semibold text-text-primary">${item.price.toFixed(2)}</p>
+                      {item.originalPrice > item.price && (
+                        <p className="text-xs text-text-secondary line-through">${item.originalPrice.toFixed(2)}</p>
+                      )}
+                    </div>
+
+                    {/* Quantity */}
+                    <div className="col-span-2 flex justify-center">
+                      <div className="flex items-center border border-border rounded-sm">
+                        <button
+                          onClick={() => updateQty(item.id, -1)}
+                          className="w-8 h-8 flex items-center justify-center text-text-secondary hover:text-primary transition-colors"
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="w-8 text-center text-sm font-semibold">{item.quantity}</span>
+                        <button
+                          onClick={() => updateQty(item.id, 1)}
+                          className="w-8 h-8 flex items-center justify-center text-text-secondary hover:text-primary transition-colors"
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Total */}
+                    <div className="col-span-2 text-right">
+                      <p className="text-sm font-bold text-primary">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ))}
+
+              {/* Actions */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <Link
+                  href="/shop"
+                  className="flex-1 text-center border border-border bg-white hover:border-primary hover:text-primary text-text-primary font-semibold text-sm py-2.5 px-6 rounded-sm transition-colors uppercase tracking-wide"
+                >
+                  Continue Shopping
+                </Link>
+              </div>
             </div>
 
             {/* Order Summary */}
-            <div className="space-y-4 h-fit">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Order Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Subtotal */}
-                  <div className="flex justify-between text-slate-600">
-                    <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+            <div className="space-y-5">
+              {/* Coupon */}
+              <div className="bg-white rounded-lg border border-border p-5">
+                <h3 className="text-sm font-bold text-text-primary uppercase tracking-widest mb-4 pb-2 border-b border-border">
+                  Coupon Code
+                </h3>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Tag size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+                    <input
+                      type="text"
+                      placeholder="Enter coupon..."
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
+                      className="w-full pl-8 pr-3 py-2 border border-border rounded-sm text-sm focus:outline-none focus:border-primary"
+                    />
                   </div>
+                  <button className="bg-primary hover:bg-primary-dark text-white font-semibold text-sm px-4 py-2 rounded-sm transition-colors">
+                    Apply
+                  </button>
+                </div>
+              </div>
 
-                  {/* Shipping */}
-                  <div className="flex justify-between text-slate-600">
+              {/* Summary */}
+              <div className="bg-white rounded-lg border border-border p-5">
+                <h3 className="text-sm font-bold text-text-primary uppercase tracking-widest mb-4 pb-2 border-b border-border">
+                  Order Summary
+                </h3>
+                <div className="space-y-3 text-sm mb-4">
+                  <div className="flex justify-between text-text-secondary">
+                    <span>Subtotal ({cartItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
+                    <span className="font-semibold text-text-primary">${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-text-secondary">
                     <span>Shipping</span>
-                    <span>
-                      {shipping === 0 ? (
-                        <span className="text-green-600 font-medium">Free</span>
-                      ) : (
-                        `$${shipping.toFixed(2)}`
-                      )}
+                    <span className="font-semibold text-text-primary">
+                      {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
                     </span>
                   </div>
-
                   {shipping === 0 && (
-                    <p className="text-xs text-green-600">
-                      ✓ Free shipping qualified
+                    <p className="text-xs text-green-600 font-medium">🎉 You qualify for free shipping!</p>
+                  )}
+                  {shipping > 0 && (
+                    <p className="text-xs text-text-secondary">
+                      Add <strong>${(55 - subtotal).toFixed(2)}</strong> more for free shipping
                     </p>
                   )}
-
-                  {/* Tax */}
-                  <div className="flex justify-between text-slate-600">
-                    <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
-                  </div>
-
-                  <div className="border-t border-slate-200 pt-4">
-                    <div className="flex justify-between font-bold text-lg text-slate-900 mb-4">
-                      <span>Total</span>
-                      <span>${total.toFixed(2)}</span>
-                    </div>
-                  </div>
-
-                  {/* Coupon */}
-                  <div className="space-y-2 pt-4 border-t border-slate-200">
-                    <p className="text-sm font-medium text-slate-900">
-                      Apply Coupon
-                    </p>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Enter code"
-                        value={coupon}
-                        onChange={(e) => setCoupon(e.target.value)}
-                      />
-                      <Button variant="outline" size="sm">
-                        Apply
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Checkout Button */}
-                  <Button className="w-full mt-6">
-                    Proceed to Checkout
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-
-                  {/* Continue Shopping */}
-                  <Button variant="outline" className="w-full" asChild>
-                    <Link href="/shop">Continue Shopping</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Promo Info */}
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="space-y-2 text-sm text-slate-600">
-                    <p>🎉 <strong>Free shipping</strong> on orders over $50</p>
-                    <p>💳 Secure checkout with SSL encryption</p>
-                    <p>✓ 30-day money back guarantee</p>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+                <div className="border-t border-border pt-3 flex justify-between font-bold text-base mb-5">
+                  <span>Total</span>
+                  <span className="text-primary">${total.toFixed(2)}</span>
+                </div>
+                <button className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-bold text-sm py-3 rounded-sm transition-colors uppercase tracking-wide">
+                  Proceed to Checkout <ArrowRight size={16} />
+                </button>
+              </div>
             </div>
           </div>
-        ) : (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center py-16">
-              <ShoppingBag className="mb-4 h-16 w-16 text-slate-400" />
-              <h2 className="mb-2 text-xl font-semibold text-slate-900">
-                Your cart is empty
-              </h2>
-              <p className="mb-6 text-slate-600">
-                Add some items to get started with your order
-              </p>
-              <Button asChild>
-                <Link href="/shop">Start Shopping</Link>
-              </Button>
-            </CardContent>
-          </Card>
         )}
       </div>
     </div>
