@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Poppins } from 'next/font/google'
 import AnnouncementBar from '@/components/layout/AnnouncementBar'
 import Header from '@/components/layout/Header'
@@ -31,7 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen flex flex-col">
         <AnnouncementBar />
         <Header />
-        <Navbar />
+        <Suspense fallback={<div className="h-20" />}>
+          <Navbar />
+        </Suspense>
         <main className="flex-1">
           {children}
         </main>

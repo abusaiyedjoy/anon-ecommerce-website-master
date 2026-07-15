@@ -18,8 +18,8 @@ const FEATURES = [
 ]
 
 export default function HomePage() {
-  // Use first 8 products for "New Products" section
-  const featuredProducts = ALL_PRODUCTS.slice(0, 8)
+  // Use first 4 products for "New Products" section
+  const featuredProducts = ALL_PRODUCTS.slice(0, 12)
 
   return (
     <>

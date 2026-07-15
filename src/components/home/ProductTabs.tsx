@@ -9,7 +9,7 @@ import { getAllProducts } from '@/lib/products'
 const allProducts = getAllProducts()
 
 // New Arrivals: products 17–20 (ids 17-20)
-const NEW_ARRIVALS = allProducts.filter(p => parseInt(p.id) >= 17)
+const NEW_ARRIVALS = allProducts.filter(p => parseInt(p.id) >= 17).slice(0, 6)
 
 // Trending: products with reviews >= 14
 const TRENDING = allProducts.filter(p => p.reviews >= 14).slice(0, 4)

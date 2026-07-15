@@ -11,28 +11,28 @@ export default function AnnouncementBar() {
         {/* Social Icons - Left */}
         <div className="flex items-center gap-3">
           <Link
-            href="#"
+            href="https://www.facebook.com/share/18omCV1PCi/"
             className="text-text-secondary hover:text-primary transition-colors"
             aria-label="Facebook"
           >
             <Facebook size={15} />
           </Link>
           <Link
-            href="#"
+            href="https://twitter.com/share?text=Check%20out%20this%20awesome%20product!&url=https://example.com/product"
             className="text-text-secondary hover:text-primary transition-colors"
             aria-label="Twitter"
           >
             <Twitter size={15} />
           </Link>
           <Link
-            href="#"
+            href="https://www.instagram.com/arfatul599?igsh=dG9tZGNwNGNsNjdv"
             className="text-text-secondary hover:text-primary transition-colors"
             aria-label="Instagram"
           >
             <Instagram size={15} />
           </Link>
           <Link
-            href="#"
+            href="https://www.linkedin.com/shareArticle?mini=true&url=https://example.com/product&title=Check%20out%20this%20awesome%20product!"
             className="text-text-secondary hover:text-primary transition-colors"
             aria-label="LinkedIn"
           >

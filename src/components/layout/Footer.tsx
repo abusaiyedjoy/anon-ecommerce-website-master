@@ -17,18 +17,18 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <h2 className="text-2xl font-bold text-white mb-4">Anon</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">DeshiMart</h2>
             <p className="text-sm text-gray-400 leading-relaxed mb-5">
               Your favorite e-commerce destination for quality fashion, accessories, and lifestyle products at unbeatable prices.
             </p>
             {/* Social Links */}
             <div className="flex items-center gap-3">
               {[
-                { icon: Facebook, href: '#', label: 'Facebook' },
-                { icon: Twitter, href: '#', label: 'Twitter' },
-                { icon: Instagram, href: '#', label: 'Instagram' },
-                { icon: Linkedin, href: '#', label: 'LinkedIn' },
-                { icon: Youtube, href: '#', label: 'YouTube' },
+                { icon: Facebook, href: 'https://www.facebook.com/share/18omCV1PCi/', label: 'Facebook' },
+                { icon: Twitter, href: 'https://twitter.com/share?text=Check%20out%20this%20awesome%20product!&url=https://example.com/product', label: 'Twitter' },
+                { icon: Instagram, href: 'https://www.instagram.com/arfatul599?igsh=dG9tZGNwNGNsNjdv', label: 'Instagram' },
+                { icon: Linkedin, href: 'https://www.linkedin.com/shareArticle?mini=true&url=https://example.com/product&title=Check%20out%20this%20awesome%20product!', label: 'LinkedIn' },
+                { icon: Youtube, href: 'https://www.youtube.com/', label: 'YouTube' },
               ].map(({ icon: Icon, href, label }) => (
                 <Link
                   key={label}

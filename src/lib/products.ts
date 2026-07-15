@@ -12,6 +12,7 @@ export interface Product {
   images: string[]
   sizes: string[]
   colors: string[]
+  gender?: 'mens' | 'womens' | 'unisex'
 }
 
 const PRODUCTS: Product[] = [
@@ -396,6 +397,185 @@ const PRODUCTS: Product[] = [
     ],
     sizes: ['One Size'],
     colors: ['#1F2937', '#78350F', '#047857']
+  },
+  {
+    id: '21',
+    title: 'Classic Leather Belt',
+    category: 'Accessories',
+    price: 24.0,
+    originalPrice: 35.0,
+    image: '/assets/images/products/belt.jpg',
+    rating: 4,
+    reviews: 10,
+    badge: 'New',
+    description: 'A polished leather belt with a brushed buckle finish and durable stitching, designed to add structure to any everyday outfit.',
+    images: [
+      '/assets/images/products/belt.jpg',
+      '/assets/images/products/1.jpg',
+      '/assets/images/products/2.jpg'
+    ],
+    sizes: ['S', 'M', 'L'],
+    colors: ['#4B5563', '#78350F'],
+    gender: 'mens'
+  },
+  {
+    id: '22',
+    title: 'Hydrating Shampoo Care',
+    category: 'Cosmetics',
+    price: 18.0,
+    originalPrice: 24.0,
+    image: '/assets/images/products/shampoo.jpg',
+    rating: 4,
+    reviews: 13,
+    description: 'Gentle daily shampoo infused with botanical extracts that cleanse, soften, and refresh hair for a healthy shine.',
+    images: [
+      '/assets/images/products/shampoo.jpg',
+      '/assets/images/products/3.jpg'
+    ],
+    sizes: ['250ml', '500ml'],
+    colors: ['#FDE68A', '#BFDBFE'],
+    gender: 'womens'
+  },
+  {
+    id: '23',
+    title: 'Women Denim Shorts',
+    category: 'Clothes',
+    price: 29.0,
+    originalPrice: 39.0,
+    image: '/assets/images/products/shorts-1.jpg',
+    rating: 4,
+    reviews: 8,
+    description: 'High-rise denim shorts with a relaxed cut and subtle stretch, ideal for summer walks, brunches, and weekend travel.',
+    images: [
+      '/assets/images/products/shorts-1.jpg',
+      '/assets/images/products/shorts-2.jpg'
+    ],
+    sizes: ['XS', 'S', 'M', 'L'],
+    colors: ['#1F2937', '#C084FC'],
+    gender: 'womens'
+  },
+  {
+    id: '29',
+    title: 'Women Lace Bra Set',
+    category: 'Lingerie',
+    price: 25.0,
+    originalPrice: 35.0,
+    image: '/assets/images/products/clothes-2.jpg',
+    rating: 4,
+    reviews: 12,
+    description: 'Soft lace bra set with adjustable straps and matching briefs, designed for comfort and everyday confidence.',
+    images: [
+      '/assets/images/products/clothes-2.jpg'
+    ],
+    sizes: ['S', 'M', 'L'],
+    colors: ['#F472B6', '#FFFFFF'],
+    gender: 'womens'
+  },
+  {
+    id: '30',
+    title: 'Women Seamless Panty Pack',
+    category: 'Lingerie',
+    price: 19.0,
+    originalPrice: 26.0,
+    image: '/assets/images/products/clothes-3.jpg',
+    rating: 4,
+    reviews: 9,
+    description: 'Set of seamless panties in soft stretch fabric for a smooth invisible fit under dresses and daily wear.',
+    images: [
+      '/assets/images/products/clothes-3.jpg'
+    ],
+    sizes: ['S', 'M', 'L'],
+    colors: ['#F9A8D4', '#F3F4F6', '#111827'],
+    gender: 'womens'
+  },
+  {
+    id: '31',
+    title: 'Women Cotton Sleep Shirt',
+    category: 'Nightwear',
+    price: 22.0,
+    originalPrice: 30.0,
+    image: '/assets/images/products/party-wear-2.jpg',
+    rating: 4,
+    reviews: 10,
+    description: 'Comfortable cotton sleep shirt with soft fabric and relaxed fit, perfect for lounging and restful sleep.',
+    images: [
+      '/assets/images/products/party-wear-2.jpg'
+    ],
+    sizes: ['S', 'M', 'L'],
+    colors: ['#EDE9FE', '#F9A8D4'],
+    gender: 'womens'
+  },
+  {
+    id: '25',
+    title: 'Sculpted Sunglasses',
+    category: 'Glasses',
+    price: 40.0,
+    originalPrice: 60.0,
+    image: '/assets/images/products/watch-3.jpg',
+    rating: 4,
+    reviews: 9,
+    description: 'Modern oversized sunglasses with UV protection and a sleek frame that feels effortless for daily outdoor wear.',
+    images: [
+      '/assets/images/products/watch-3.jpg',
+      '/assets/images/products/watch-4.jpg'
+    ],
+    sizes: ['One Size'],
+    colors: ['#111827', '#F59E0B'],
+    gender: 'unisex'
+  },
+  {
+    id: '26',
+    title: 'Canvas Weekend Bag',
+    category: 'Bags',
+    price: 56.0,
+    originalPrice: 74.0,
+    image: '/assets/images/products/jacket-5.jpg',
+    rating: 4,
+    reviews: 9,
+    description: 'Durable canvas carry-all with padded straps and a roomy interior for travel, work, and weekend essentials.',
+    images: [
+      '/assets/images/products/jacket-5.jpg',
+      '/assets/images/products/jacket-6.jpg'
+    ],
+    sizes: ['One Size'],
+    colors: ['#A16207', '#0F172A'],
+    gender: 'unisex'
+  },
+  {
+    id: '27',
+    title: 'Rose Quartz Necklace',
+    category: 'Jewelry',
+    price: 35.0,
+    originalPrice: 48.0,
+    image: '/assets/images/products/jewellery-3.jpg',
+    rating: 5,
+    reviews: 12,
+    description: 'Thoughtfully designed rose quartz pendant necklace that adds a soft, elevated finish to everyday styling.',
+    images: [
+      '/assets/images/products/jewellery-3.jpg',
+      '/assets/images/products/jewellery-1.jpg'
+    ],
+    sizes: ['One Size'],
+    colors: ['#F9A8D4', '#E5E7EB'],
+    gender: 'womens'
+  },
+  {
+    id: '28',
+    title: 'Velvet Evening Dress',
+    category: 'Clothes',
+    price: 64.0,
+    originalPrice: 85.0,
+    image: '/assets/images/products/clothes-3.jpg',
+    rating: 5,
+    reviews: 16,
+    description: 'A graceful velvet dress with a fitted waist and flowing silhouette crafted for evening events and special occasions.',
+    images: [
+      '/assets/images/products/clothes-3.jpg',
+      '/assets/images/products/clothes-4.jpg'
+    ],
+    sizes: ['S', 'M', 'L'],
+    colors: ['#7C3AED', '#DB2777'],
+    gender: 'womens'
   }
 ]
 
