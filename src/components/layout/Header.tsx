@@ -63,7 +63,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <span className="text-2xl font-bold text-text-primary tracking-tight">
-              DeshiMart
+              All Gossip
             </span>
           </Link>
 

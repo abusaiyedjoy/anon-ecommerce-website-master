@@ -17,7 +17,7 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <h2 className="text-2xl font-bold text-white mb-4">DeshiMart</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">All Gossip</h2>
             <p className="text-sm text-gray-400 leading-relaxed mb-5">
               Your favorite e-commerce destination for quality fashion, accessories, and lifestyle products at unbeatable prices.
             </p>

@@ -13,81 +13,45 @@ const ALL_PRODUCTS = getAllProducts()
 function getCategoryLabel(value: string | null) {
   switch (value?.toLowerCase()) {
     case 'jewelry':
+    case 'jewellery':
       return 'Jewelry'
     case 'perfume':
       return 'Perfume'
-    case 'clothes':
-      return 'Clothes'
-    case 'footwear':
-      return 'Footwear'
-    case 'accessories':
-      return 'Accessories'
-    case 'watches':
-      return 'Watches'
-    case 'cosmetics':
-      return 'Cosmetics'
-    case 'glasses':
-      return 'Glasses'
-    case 'bags':
-      return 'Bags'
+    case 'mens':
+    case "men's":
+      return "Men's"
+    case 'womens':
+    case "women's":
+      return "Women's"
     default:
       return 'All'
   }
 }
 
 function matchesCategoryFilter(product: (typeof ALL_PRODUCTS)[number], categoryKey: string) {
-  const normalizedCategory = categoryKey.toLowerCase()
-  const productCategory = product.category.toLowerCase()
+  const cat = product.category.toLowerCase()
+  const isJewelry = ['jewelry', 'jewellery', 'necklace', 'bracelet', 'earrings'].includes(cat)
+  const isPerfume = cat === 'perfume'
 
-  switch (normalizedCategory) {
-    case 'all':
+  switch (categoryKey) {
+    case 'All':
       return true
-    case 'clothes':
-      return ['jacket', 'shirt', 'skirt', 'clothes', 'casual', 'party wear', 'shorts', 'dress'].includes(productCategory)
-    case 'footwear':
-      return ['shoes', 'footwear', 'sandal', 'sports'].includes(productCategory)
-    case 'jewelry':
-      return ['jewelry', 'jewellery', 'necklace', 'bracelet', 'earrings'].includes(productCategory)
-    case 'perfume':
-      return productCategory === 'perfume'
-    case 'cosmetics':
-      return ['cosmetics', 'shampoo', 'beauty'].includes(productCategory)
-    case 'glasses':
-      return ['glasses', 'sunglasses'].includes(productCategory)
-    case 'bags':
-      return ['bags', 'bag', 'pouch', 'backpack'].includes(productCategory)
-    case 'accessories':
-      return ['accessories', 'watch', 'watches', 'belt', 'hat', 'pouch'].includes(productCategory)
-    case 'lingerie':
-      return ['lingerie', 'nightwear'].includes(productCategory)
-    case 'nightwear':
-      return ['nightwear', 'lingerie'].includes(productCategory)
+    case "Men's":
+      // Only clothing/accessories/shoes for men — never jewelry or perfume
+      return product.gender === 'mens' && !isJewelry && !isPerfume
+    case "Women's":
+      // Only clothing/accessories/shoes for women — never jewelry or perfume
+      return product.gender === 'womens' && !isJewelry && !isPerfume
+    case 'Jewelry':
+      return isJewelry
+    case 'Perfume':
+      return isPerfume
     default:
-      return productCategory === normalizedCategory
+      return true
   }
 }
 
-function matchesGenderFilter(product: (typeof ALL_PRODUCTS)[number], genderParam: string | null) {
-  if (!genderParam) return true
 
-  const normalizedGender = genderParam.toLowerCase()
-  const title = product.title.toLowerCase()
-  const productGender = product.gender?.toLowerCase()
-
-  if (productGender) {
-    return productGender === normalizedGender
-  }
-
-  if (normalizedGender === 'mens') {
-    return title.includes('men ') || title.includes('mens') || title.includes("men's")
-  }
-
-  if (normalizedGender === 'womens') {
-    return title.includes('women') || title.includes('womens') || title.includes("women's")
-  }
-
-  return false
-}
 
 export default function ShopPageContent() {
   const searchParams = useSearchParams()
@@ -101,15 +65,19 @@ export default function ShopPageContent() {
   const [sortBy, setSortBy] = useState('featured')
 
   useEffect(() => {
-    setSelectedCategory(getCategoryLabel(categoryParam))
-  }, [categoryParam])
+    // Gender URL param (?gender=mens) maps to Men's / Women's category
+    if (genderParam) {
+      setSelectedCategory(getCategoryLabel(genderParam))
+    } else {
+      setSelectedCategory(getCategoryLabel(categoryParam))
+    }
+  }, [categoryParam, genderParam])
 
   const filtered = ALL_PRODUCTS.filter((p) => {
     const matchSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase())
     const matchCat = matchesCategoryFilter(p, selectedCategory)
-    const matchGender = matchesGenderFilter(p, genderParam)
     const matchPrice = p.price >= priceRange[0] && p.price <= priceRange[1]
-    return matchSearch && matchCat && matchGender && matchPrice
+    return matchSearch && matchCat && matchPrice
   })
 
   const sorted = [...filtered].sort((a, b) => {

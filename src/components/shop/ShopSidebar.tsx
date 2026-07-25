@@ -15,13 +15,10 @@ interface ShopSidebarProps {
 
 const CATEGORIES = [
   { label: 'All', icon: null },
-  { label: 'Clothes', icon: null },
-  { label: 'Footwear', icon: null },
+  { label: "Men's", icon: null },
+  { label: "Women's", icon: null },
   { label: 'Jewelry', icon: null },
   { label: 'Perfume', icon: null },
-  { label: 'Cosmetics', icon: null },
-  { label: 'Glasses', icon: null },
-  { label: 'Bags', icon: null },
 ]
 
 const BEST_SELLERS = [
